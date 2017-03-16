@@ -77,7 +77,7 @@ public class SetupTimer {
     private class TimerFinished implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-            BoardSquareEventPane.randomSetup();
+            BoardSquareEventPane.randomSetup();									//Random setup of Game HERE dillion
         }
     }
 }

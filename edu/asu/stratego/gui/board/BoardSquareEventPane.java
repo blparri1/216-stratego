@@ -383,7 +383,7 @@ public class BoardSquareEventPane extends GridPane {
      * During the Setup phase of the game, this method randomly places the 
      * pieces that have not yet been placed when the Setup Timer hits 0.
      */
-    public static void randomSetup() {
+    public static void randomSetup() {										//This is going to randomize placement - dillion
         PieceColor playerColor = Game.getPlayer().getColor();
         
         // Iterate through each square
