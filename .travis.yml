@@ -2,5 +2,4 @@ language: java
 jdk: 
   - oraclejdk8
 
-ant build
-ant test
+install: ant test
