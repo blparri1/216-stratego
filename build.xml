@@ -1,0 +1,64 @@
+<project name="216-stratego"
+    default="targets" basedir=".">
+    
+    <property name="source.dir" value="edu"/>
+    <property name="build.dir" value="classes"/>
+	<property name="test.dir" value="test"/>
+	<property name="lib.dir" value="lib"/>
+    <!-- C++ properties 
+    <property name="lib" value="./lib" />
+    -->
+    <property environment="env"/>
+    <property name="user" value="${env.USERNAME}"/>
+	<property name="build.junitreport.dir" value="${build.dir}/junitreport"/>
+    
+    <target name="targets">
+        <echo message="Targets are clean, prepare, test, and targets"/>
+    </target>
+    
+    <path id="compile.classpath">
+        <pathelement location="${build.dir}"/>
+    </path>
+	
+	<path id="test.classpath">
+		<pathelement location="${build.dir}"/>
+	</path>
+    
+    <target name="prepare">
+        <mkdir dir="${build.dir}" />
+    </target>
+    
+    <target name="clean">
+        <delete dir="${build.dir}" failonerror="false"/>
+    	<delete dir="${build.junitreport.dir}"/>
+    </target>
+    
+    <target name="build" depends="prepare">
+        <javac srcdir="${source.dir}"
+            includeantruntime="false"
+            destdir="${build.dir}">
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
+    
+    <target name="test" depends="build"
+        description="Runs JUnit Tests">
+    	<mkdir dir="${build.junitreport.dir}"/> 
+    	<junit printsummary="on" haltonfailure="yes">
+    	</junit>
+ <!--   	<junit printsummary="withOutAndErr" haltonfailure="yes" fork="on" showoutput="true">      
+    		<classpath>  
+    			<path refid="test.classpath"/>
+    		</classpath>
+    			<formatter type="plain"/>
+    			<batchtest todir="${build.junitreport.dir}">
+    				<fileset dir="${source.dir}">
+--> <!--   		    		<include name="test/*Test.java"/>
+    		        <exclude name=""/>    -->
+<!--    		    	</fileset>
+    			</batchtest>
+    	</junit>							-->
+    	<echo message="JUnit results in ${build.junitreport.dir}"/>
+    </target>
+    
+</project>
