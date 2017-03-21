@@ -21,10 +21,12 @@
     </path>
 	
 	<path id="test.classpath">
+	    <pathelement location="lib/junit-4.12.jar" />
+		<pathelement location="lib/hamcrest-core-1.3.jar" />
 		<pathelement location="${build.dir}"/>
 	</path>
     
-    <target name="prepare">
+    <target name="prepare" depends="clean">
         <mkdir dir="${build.dir}" />
     </target>
     
@@ -45,20 +47,16 @@
         description="Runs JUnit Tests">
     	<mkdir dir="${build.junitreport.dir}"/> 
     	<junit printsummary="on" haltonfailure="yes">
-    	</junit>
- <!--   	<junit printsummary="withOutAndErr" haltonfailure="yes" fork="on" showoutput="true">      
-    		<classpath>  
-    			<path refid="test.classpath"/>
+    		<classpath>
+    			<path refid="test.classpath" />   
+	    		<pathelement location="${build.junitreport.dir}"/>        	      
     		</classpath>
-    			<formatter type="plain"/>
-    			<batchtest todir="${build.junitreport.dir}">
-    				<fileset dir="${source.dir}">
---> <!--   		    		<include name="test/*Test.java"/>
-    		        <exclude name=""/>    -->
-<!--    		    	</fileset>
-    			</batchtest>
-    	</junit>							-->
+    	    <formatter type="brief" usefile="false" />
+    	    <batchtest>
+    	    	<fileset dir="${test.dir}" includes="test/*Test*.java" />
+    	   	</batchtest>             
+    	</junit>							
     	<echo message="JUnit results in ${build.junitreport.dir}"/>
     </target>
-    
+<!-- comment to force update -->    
 </project>
