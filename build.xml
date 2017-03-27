@@ -1,28 +1,39 @@
 <project name="216-stratego"
     default="targets" basedir=".">
     
-    <property name="source.dir" value="edu"/>
-    <property name="build.dir" value="classes"/>
-	<property name="test.dir" value="test"/>
+    <property name="source.dir" value="${basedir}"/>
+    <property name="build.dir" value="${basedir}/classes"/>
+	<property name="build.classes.dir" value="${build.dir}"/>
+	<property name="test.dir" value="edu/asu/stratego/test"/>
 	<property name="lib.dir" value="lib"/>
     <!-- C++ properties 
     <property name="lib" value="./lib" />
     -->
     <property environment="env"/>
     <property name="user" value="${env.USERNAME}"/>
-	<property name="build.junitreport.dir" value="${build.dir}/junitreport"/>
+	<property name="build.junitreport.dir" value="junitreport"/>
     
     <target name="targets">
         <echo message="Targets are clean, prepare, test, and targets"/>
     </target>
     
+	<path id="classpath">
+		<pathelement path="${build.classes.dir}"/>
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+			<include name="*.zip"/>
+		</fileset>
+	</path>
+	
     <path id="compile.classpath">
+    	<pathelement location="${lib.dir}/junit-4.12.jar" />
+    	<pathelement location="${lib.dir}/hamcrest-core-1.3.jar" />
         <pathelement location="${build.dir}"/>
     </path>
 	
 	<path id="test.classpath">
-	    <pathelement location="lib/junit-4.12.jar" />
-		<pathelement location="lib/hamcrest-core-1.3.jar" />
+	    <pathelement location="${lib.dir}/junit-4.12.jar" />
+		<pathelement location="${lib.dir}/hamcrest-core-1.3.jar" />
 		<pathelement location="${build.dir}"/>
 	</path>
     
@@ -43,20 +54,20 @@
         </javac>
     </target>
     
-    <target name="test" depends="build"
-        description="Runs JUnit Tests">
+    <target name="test" depends="build" description="Runs JUnit Tests">
+    	<delete dir="${build.junitreport.dir}"/>
     	<mkdir dir="${build.junitreport.dir}"/> 
-    	<junit printsummary="on" haltonfailure="yes">
+    	<junit printsummary="withOutAndErr" haltonfailure="yes" fork="on" showoutput="true">
     		<classpath>
-    			<path refid="test.classpath" />   
-	    		<pathelement location="${build.junitreport.dir}"/>        	      
+    			<path refid="classpath" />       	      
     		</classpath>
-    	    <formatter type="brief" usefile="false" />
-    	    <batchtest>
-    	    	<fileset dir="${test.dir}" includes="test/*Test*.java" />
+    	    <formatter type="plain"/>
+    	    <batchtest todir="${build.junitreport.dir}">
+    	    	<fileset dir="${source.dir}">
+    	    		 <include name="**/*Test*.java"/>
+    	    	</fileset>
     	   	</batchtest>             
     	</junit>							
     	<echo message="JUnit results in ${build.junitreport.dir}"/>
-    </target>
-<!-- comment to force update -->    
+    </target>   
 </project>
