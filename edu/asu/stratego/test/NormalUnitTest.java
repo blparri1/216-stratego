@@ -68,6 +68,8 @@ public class NormalUnitTest {
 	@After
 	public void tearDown() throws Exception {
 		
+		testScoutBlue = null;
+		testScoutRed = null;
 		testSergentBlue = null;
 		testSergentRed = null;
 		testLieutenantBlue = null;
