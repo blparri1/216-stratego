@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class MoveTest {
+public class MoveAttempt {
 /*	private Server ser;
 	public static Client red;
 	public static Client blue;
