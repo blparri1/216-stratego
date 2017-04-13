@@ -116,10 +116,16 @@ public class ClientGameManager implements Runnable {
             else
                 Game.getPlayer().setColor(PieceColor.RED);
         }
-        catch (IOException | ClassNotFoundException e) {
-            // TODO Handle this exception somehow...
-            e.printStackTrace();
-        }
+        catch (ClassNotFoundException e) {
+        	System.out.println("Class not found Exception - wait for opponent");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("IO Exception - wait for opponent");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Exception - wait for opponent");
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -174,9 +180,13 @@ public class ClientGameManager implements Runnable {
         // Get game status from the server
         try {
 			Game.setStatus((GameStatus) fromServer.readObject());
-		} catch (ClassNotFoundException | IOException e1) {
-			// TODO Handle this somehow...
-			e1.printStackTrace();
+		//DTDICKER HERE is where the Client can detect that the connection was lost
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
         
@@ -380,10 +390,19 @@ public class ClientGameManager implements Runnable {
                 // Get game status from server.
                 Game.setStatus((GameStatus) fromServer.readObject());
             }
-            catch (ClassNotFoundException | IOException | InterruptedException e) {
-                // TODO Handle this exception somehow...
-                e.printStackTrace();
-            }
+            catch (ClassNotFoundException e) {
+            	System.out.println("Class not found Exception - play game");
+    			e.printStackTrace();
+    		} catch (IOException e) {
+    			System.out.println("IO Exception - play game");
+    			e.printStackTrace();
+    		} catch (InterruptedException e) {
+    			System.out.println("Interrupted Exception - play game");
+    			e.printStackTrace();
+    		} catch (Exception e) {
+    			System.out.println("Exception - play game");
+    			e.printStackTrace();
+    		}
         }
         
         revealAll();

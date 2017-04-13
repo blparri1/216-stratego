@@ -85,6 +85,9 @@ public class ServerGameManager implements Runnable {
         }
         catch(IOException e) {
             // TODO Handle this exception somehow...
+        	
+        	System.out.println("IOE EXception!!!!!!!!!!!!!!!!");
+        	
             e.printStackTrace();
         }
     }
@@ -112,9 +115,18 @@ public class ServerGameManager implements Runnable {
             toPlayerOne.writeObject(playerTwo);
             toPlayerTwo.writeObject(playerOne);
         }
-        catch(ClassNotFoundException | IOException e) {
+        catch(ClassNotFoundException e) {
+        	System.out.println("Class not Found! - exchange players");
             // TODO Handle this exception somehow...
             e.printStackTrace();
+        }
+        catch( IOException e) {
+        	System.out.println("IOException! - exchange players");
+        	e.printStackTrace();
+        }
+        catch( Exception e) {
+        	System.out.println("Exception! - exchange players");
+        	e.printStackTrace();
         }
     }
     
@@ -159,9 +171,20 @@ public class ServerGameManager implements Runnable {
             toPlayerOne.writeObject(winCondition);
             toPlayerTwo.writeObject(winCondition);
         }
-        catch (ClassNotFoundException | IOException e) {
+        catch(ClassNotFoundException e) {
+        	System.out.println("Class not Found! - exchange setup");
             // TODO Handle this exception somehow...
             e.printStackTrace();
+        }
+        catch( IOException e) {
+        	//System.exit(1);
+        	System.out.println("IOException! - exchange setup");
+        	e.printStackTrace();
+        	return;
+        }
+        catch( Exception e) {
+        	System.out.println("Exception! - exchange setup");
+        	e.printStackTrace();
         }
         
     }
@@ -296,9 +319,20 @@ public class ServerGameManager implements Runnable {
                 
                 // Check win conditions.
             }
-            catch (IOException | ClassNotFoundException e) {
-                System.out.println(session + "Error occured during network I/O");
-                return;
+            catch(ClassNotFoundException e) {
+            	System.out.println("Class not Found! - Play game");
+                // TODO Handle this exception somehow...
+                e.printStackTrace();
+            }
+            catch( IOException e) { // things break here
+            	//System.exit(1);
+            	System.out.println("IOException! - Play game");
+            	e.printStackTrace();
+            	return;
+            }
+            catch( Exception e) {
+            	System.out.println("Exception! - Play game");
+            	e.printStackTrace();
             }
         }
     }
