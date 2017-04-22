@@ -3,11 +3,10 @@ package edu.asu.stratego.game;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import javax.swing.JFrame;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -35,7 +34,7 @@ public class ClientGameManager implements Runnable {
     
     private ObjectOutputStream toServer;
     private ObjectInputStream  fromServer;
-    
+    private boolean Connected = true;
     private ClientStage stage;
     
     boolean win;
@@ -90,6 +89,7 @@ public class ClientGameManager implements Runnable {
         }
         catch(InterruptedException e) {
             // TODO Handle this exception somehow...
+        	System.out.println("line 89 client");
             e.printStackTrace();
         }
     }
@@ -112,6 +112,9 @@ public class ClientGameManager implements Runnable {
             // I/O Streams.
             toServer = new ObjectOutputStream(ClientSocket.getInstance().getOutputStream());
             fromServer = new ObjectInputStream(ClientSocket.getInstance().getInputStream());
+            if (fromServer == null) {
+            	System.out.println("null detected");
+            }
      
             // Exchange player information.
             toServer.writeObject(Game.getPlayer());
@@ -123,10 +126,16 @@ public class ClientGameManager implements Runnable {
             else
                 Game.getPlayer().setColor(PieceColor.RED);
         }
-        catch (IOException | ClassNotFoundException e) {
-            // TODO Handle this exception somehow...
-            e.printStackTrace();
-        }
+        catch (ClassNotFoundException e) {
+        	System.out.println("Class not found Exception - wait for opponent");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("IO Exception - wait for opponent");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Exception - wait for opponent");
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -166,8 +175,22 @@ public class ClientGameManager implements Runnable {
                     }
                 });
             }
-            catch (InterruptedException | IOException | ClassNotFoundException e) {
+            catch (ClassNotFoundException e) {
+            	System.out.println("line 172 client");
+            	e.printStackTrace();
+            }
+            catch (InterruptedException e) {
+            	e.printStackTrace();
+            	System.out.println("line 176 client");
+            }
+            catch (IOException e) {
+            	System.out.println("line 180 client");
                 // TODO Handle this exception somehow...
+            	e.printStackTrace();
+            }
+            catch (Exception e) {
+            	System.out.println("line 183 client");
+            	e.printStackTrace();
             }
         }
     }
@@ -181,14 +204,28 @@ public class ClientGameManager implements Runnable {
         // Get game status from the server
         try {
 			Game.setStatus((GameStatus) fromServer.readObject());
-		} catch (ClassNotFoundException | IOException e1) {
-			// TODO Handle this somehow...
-			e1.printStackTrace();
+		//DTDICKER HERE is where the Client can detect that the connection was lost
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("testing for normies client line 191");
+			
+			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
+			//System.exit(1);
+			/*
+			 * BRYAN Here too does yoda say a crash happened, fixing it needs.
+			 */
+			Game.setStatus(GameStatus.CONNECTION_LOST);
+			Connected = false;
+		} catch (Exception e) {
+			System.out.println("line 195 client");
+			e.printStackTrace();
 		}
 
         
         // Main loop (when playing)
-        while (Game.getStatus() == GameStatus.IN_PROGRESS) {
+        while (Game.getStatus() == GameStatus.IN_PROGRESS && Connected) {
             try {
 
                 // Get turn color from server.
@@ -246,6 +283,7 @@ public class ClientGameManager implements Runnable {
                 				}
         						catch (Exception e) {
         							// TODO Handle this somehow...
+        							System.out.println("line 257 client");
         							e.printStackTrace();
         						}
                 			});
@@ -283,6 +321,7 @@ public class ClientGameManager implements Runnable {
             			}
 						catch (Exception e) {
 							// TODO Handle this somehow...
+							System.out.println("line 294 client");
 							e.printStackTrace();
 						}
             		});
@@ -314,6 +353,7 @@ public class ClientGameManager implements Runnable {
             			}
 						catch (Exception e) {
 							// TODO Handle this somehow...
+							System.out.println("line 325 client");
 							e.printStackTrace();
 						}
             		});
@@ -388,10 +428,27 @@ public class ClientGameManager implements Runnable {
                 // Get game status from server.
                 Game.setStatus((GameStatus) fromServer.readObject());
             }
-            catch (ClassNotFoundException | IOException | InterruptedException e) {
-                // TODO Handle this exception somehow...
-                e.printStackTrace();
-            }
+            catch (ClassNotFoundException e) {
+            	System.out.println("Class not found Exception - play game - client");
+    			e.printStackTrace();
+    		} catch (IOException e) {
+    			System.out.println("IO Exception - play game");
+    			//e.printStackTrace();
+    			System.out.println("testing for normies client");
+    			/*
+    			 * BRYAN this is where is caught when the player is disconnected
+    			 */
+    			Game.setStatus(GameStatus.CONNECTION_LOST);
+    			Connected = false;
+    			//JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
+    			//System.exit(1);
+    		} catch (InterruptedException e) {
+    			System.out.println("Interrupted Exception - play game client");
+    			e.printStackTrace();
+    		} catch (Exception e) {
+    			System.out.println("Exception - play game client");
+    			e.printStackTrace();
+    		}
         }
         
         revealAll();
