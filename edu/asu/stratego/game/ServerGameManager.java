@@ -184,9 +184,19 @@ public class ServerGameManager implements Runnable {
         	//System.out.println("IOException! - exchange setup");
         	//e.printStackTrace();
         	//return;
-        	System.out.println("testing for normies - ");
-			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
-			System.exit(1);
+        	System.out.println("IOException! - exchange setup Server");
+        	System.out.println("closing clients");
+        	try {
+				toPlayerOne.close();
+				toPlayerTwo.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        	System.out.println("testing for normies - server ");
+			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost. - server");
+			//System.exit(1);
+			
         }
         catch( Exception e) {
         	System.out.println("Exception! - exchange setup");
@@ -330,10 +340,21 @@ public class ServerGameManager implements Runnable {
                 // TODO Handle this exception somehow...
                 e.printStackTrace();
             }
-            catch( IOException e) { // things break here
+            catch( IOException e) { // things break here DTDICKER BREAKING
+            	System.out.println("IOException! - Play game");
+            	System.out.println("closing clients");
+            	try {
+					toPlayerOne.close();
+					toPlayerTwo.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            	
             	//System.exit(1);
             	System.out.println("IOException! - Play game");
             	e.printStackTrace();
+            	return;
             }
             catch( Exception e) {
             	System.out.println("Exception! - Play game");

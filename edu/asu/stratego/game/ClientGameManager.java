@@ -34,7 +34,7 @@ public class ClientGameManager implements Runnable {
     
     private ObjectOutputStream toServer;
     private ObjectInputStream  fromServer;
-    
+    private boolean Connected = true;
     private ClientStage stage;
     
     boolean win;
@@ -112,6 +112,9 @@ public class ClientGameManager implements Runnable {
             // I/O Streams.
             toServer = new ObjectOutputStream(ClientSocket.getInstance().getOutputStream());
             fromServer = new ObjectInputStream(ClientSocket.getInstance().getInputStream());
+            if (fromServer == null) {
+            	System.out.println("null detected");
+            }
      
             // Exchange player information.
             toServer.writeObject(Game.getPlayer());
@@ -207,8 +210,14 @@ public class ClientGameManager implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("testing for normies client line 191");
+			
 			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
-			System.exit(1);
+			//System.exit(1);
+			/*
+			 * BRYAN Here too does yoda say a crash happened, fixing it needs.
+			 */
+			Game.setStatus(GameStatus.CONNECTION_LOST);
+			Connected = false;
 		} catch (Exception e) {
 			System.out.println("line 195 client");
 			e.printStackTrace();
@@ -216,7 +225,7 @@ public class ClientGameManager implements Runnable {
 
         
         // Main loop (when playing)
-        while (Game.getStatus() == GameStatus.IN_PROGRESS) {
+        while (Game.getStatus() == GameStatus.IN_PROGRESS && Connected) {
             try {
 
                 // Get turn color from server.
@@ -426,6 +435,11 @@ public class ClientGameManager implements Runnable {
     			System.out.println("IO Exception - play game");
     			//e.printStackTrace();
     			System.out.println("testing for normies client");
+    			/*
+    			 * BRYAN this is where is caught when the player is disconnected
+    			 */
+    			Game.setStatus(GameStatus.CONNECTION_LOST);
+    			Connected = false;
     			//JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
     			//System.exit(1);
     		} catch (InterruptedException e) {
