@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -11,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.util.Duration;
 import edu.asu.stratego.game.board.ClientSquare;
 import edu.asu.stratego.gui.BoardScene;
+import edu.asu.stratego.gui.ClientOutcome;
 import edu.asu.stratego.gui.ClientStage;
 import edu.asu.stratego.gui.ConnectionScene;
 import edu.asu.stratego.gui.board.BoardTurnIndicator;
@@ -32,6 +37,8 @@ public class ClientGameManager implements Runnable {
     private ObjectInputStream  fromServer;
     
     private ClientStage stage;
+    
+    boolean win;
     
     /**
      * Creates a new instance of ClientGameManager.
@@ -183,6 +190,7 @@ public class ClientGameManager implements Runnable {
         // Main loop (when playing)
         while (Game.getStatus() == GameStatus.IN_PROGRESS) {
             try {
+
                 // Get turn color from server.
                 Game.setTurn((PieceColor) fromServer.readObject());
                 
@@ -408,6 +416,29 @@ public class ClientGameManager implements Runnable {
     			}
     		}
     	});
+    	
+    	boolean redDead;
+    	System.out.println("[Debug] Player: " + Game.getPlayer().getColor());
+    	System.out.println("[Debug] Game Status: " + Game.getStatus());
+    	System.out.println((Game.getStatus() == GameStatus.RED_CAPTURED || Game.getStatus().equals(GameStatus.RED_DISCONNECTED) || Game.getStatus().equals(GameStatus.RED_NO_MOVES) || Game.getStatus().equals(GameStatus.BLUE_FLAG_UNREACHABLE)));
+    	
+    	if ((Game.getStatus() == GameStatus.RED_CAPTURED || Game.getStatus().equals(GameStatus.RED_DISCONNECTED) || Game.getStatus().equals(GameStatus.RED_NO_MOVES) || Game.getStatus().equals(GameStatus.BLUE_FLAG_UNREACHABLE))){
+    		redDead = true;
+    	} else {
+    		redDead = false;
+    	}
+    	
+    	if (Game.getPlayer().getColor().equals(PieceColor.BLUE) && redDead) {
+    		win = true;
+    	} else if (Game.getPlayer().getColor().equals(PieceColor.BLUE) && !redDead){
+    		win = false;
+    	} else if (Game.getPlayer().getColor().equals(PieceColor.RED) && redDead) {
+    		win = false;
+    	} else if (Game.getPlayer().getColor().equals(PieceColor.RED) && !redDead){
+    		win = true;
+    	}
+   
+    	ClientOutcome outcome = new ClientOutcome(win);
     }
     
     // Finicky, ill-advised to edit. Resets the opacity, rotation, and piece to null
