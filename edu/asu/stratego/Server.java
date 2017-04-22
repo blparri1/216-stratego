@@ -5,8 +5,15 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
+import edu.asu.stratego.game.Player;
 import edu.asu.stratego.game.ServerGameManager;
 
+//
+import edu.asu.stratego.gui.ClientOutcome;
+//
 /**
  * The Stratego Server creates a socket and listens for connections from every 
  * two players to form a game session. Each session is handled by a thread, 
