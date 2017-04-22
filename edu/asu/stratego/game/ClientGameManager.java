@@ -37,7 +37,7 @@ public class ClientGameManager implements Runnable {
     private boolean Connected = true;
     private ClientStage stage;
     
-    boolean win;
+    int win;
     
     /**
      * Creates a new instance of ClientGameManager.
@@ -208,10 +208,10 @@ public class ClientGameManager implements Runnable {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("testing for normies client line 191");
+//			e.printStackTrace();
+//			System.out.println("testing for normies client line 191");
 			
-			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
+//			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
 			//System.exit(1);
 			/*
 			 * BRYAN Here too does yoda say a crash happened, fixing it needs.
@@ -479,20 +479,24 @@ public class ClientGameManager implements Runnable {
     	System.out.println("[Debug] Game Status: " + Game.getStatus());
     	System.out.println((Game.getStatus() == GameStatus.RED_CAPTURED || Game.getStatus().equals(GameStatus.RED_DISCONNECTED) || Game.getStatus().equals(GameStatus.RED_NO_MOVES) || Game.getStatus().equals(GameStatus.BLUE_FLAG_UNREACHABLE)));
     	
-    	if ((Game.getStatus() == GameStatus.RED_CAPTURED || Game.getStatus().equals(GameStatus.RED_DISCONNECTED) || Game.getStatus().equals(GameStatus.RED_NO_MOVES) || Game.getStatus().equals(GameStatus.BLUE_FLAG_UNREACHABLE))){
-    		redDead = true;
+    	if (Game.getStatus() == GameStatus.CONNECTION_LOST){
+    		win = 0;
     	} else {
-    		redDead = false;
-    	}
-    	
-    	if (Game.getPlayer().getColor().equals(PieceColor.BLUE) && redDead) {
-    		win = true;
-    	} else if (Game.getPlayer().getColor().equals(PieceColor.BLUE) && !redDead){
-    		win = false;
-    	} else if (Game.getPlayer().getColor().equals(PieceColor.RED) && redDead) {
-    		win = false;
-    	} else if (Game.getPlayer().getColor().equals(PieceColor.RED) && !redDead){
-    		win = true;
+    		if ((Game.getStatus() == GameStatus.RED_CAPTURED || Game.getStatus().equals(GameStatus.RED_DISCONNECTED) || Game.getStatus().equals(GameStatus.RED_NO_MOVES) || Game.getStatus().equals(GameStatus.BLUE_FLAG_UNREACHABLE))){
+        		redDead = true;
+        	} else {
+        		redDead = false;
+        	}
+        	
+        	if (Game.getPlayer().getColor().equals(PieceColor.BLUE) && redDead) {
+        		win = 1;
+        	} else if (Game.getPlayer().getColor().equals(PieceColor.BLUE) && !redDead){
+        		win = 2;
+        	} else if (Game.getPlayer().getColor().equals(PieceColor.RED) && redDead) {
+        		win = 2;
+        	} else if (Game.getPlayer().getColor().equals(PieceColor.RED) && !redDead){
+        		win = 1;
+        	}
     	}
    
     	ClientOutcome outcome = new ClientOutcome(win);

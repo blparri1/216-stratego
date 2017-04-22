@@ -29,9 +29,10 @@ public class ClientOutcome extends JFrame {
 	ScrollPort port;
 	public BufferedImage youWin;
 	public BufferedImage youLose;
+	public BufferedImage dis;
 	JButton button;
 	
-	public ClientOutcome(boolean outcome){
+	public ClientOutcome(int outcome){
 		this.setSize(256, 281);
 		this.setLayout(null);
 		this.setUndecorated(true);
@@ -47,6 +48,7 @@ public class ClientOutcome extends JFrame {
 		try {
 			youWin = ImageIO.read(ClientOutcome.class.getResource("images/YouWin.png"));
 			youLose = ImageIO.read(ClientOutcome.class.getResource("images/YouLose.png"));
+			dis = ImageIO.read(ClientOutcome.class.getResource("images/Disconnected.png"));
 		} catch (IOException e) {
 			System.out.println("[ERROR} Win/Lose image unable to load.");
 		}
@@ -57,10 +59,12 @@ public class ClientOutcome extends JFrame {
 		scroll.setSize(256, 256);
 		scroll.setBounds(0, 0, 256, 256);
 		this.add(scroll);
-		if (outcome)  { //win
+		if (outcome == 1)  { //win
 			port.setBackground(youWin);
-		} else {
+		} else if (outcome == 2) {
 			port.setBackground(youLose);
+		} else {
+			port.setBackground(dis);
 		}
 		scroll.setViewport(port);
 		this.add(button);
