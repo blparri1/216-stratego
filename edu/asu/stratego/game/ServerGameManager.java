@@ -7,6 +7,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import edu.asu.stratego.game.board.ServerBoard;
 
 /**
@@ -85,6 +88,9 @@ public class ServerGameManager implements Runnable {
         }
         catch(IOException e) {
             // TODO Handle this exception somehow...
+        	
+        	System.out.println("IOE EXception!!!!!!!!!!!!!!!!");
+        	
             e.printStackTrace();
         }
     }
@@ -112,9 +118,18 @@ public class ServerGameManager implements Runnable {
             toPlayerOne.writeObject(playerTwo);
             toPlayerTwo.writeObject(playerOne);
         }
-        catch(ClassNotFoundException | IOException e) {
+        catch(ClassNotFoundException e) {
+        	System.out.println("Class not Found! - exchange players");
             // TODO Handle this exception somehow...
             e.printStackTrace();
+        }
+        catch( IOException e) {
+        	System.out.println("IOException! - exchange players");
+        	e.printStackTrace();
+        }
+        catch( Exception e) {
+        	System.out.println("Exception! - exchange players");
+        	e.printStackTrace();
         }
     }
     
@@ -159,9 +174,35 @@ public class ServerGameManager implements Runnable {
             toPlayerOne.writeObject(winCondition);
             toPlayerTwo.writeObject(winCondition);
         }
-        catch (ClassNotFoundException | IOException e) {
+        catch(ClassNotFoundException e) {
+        	System.out.println("Class not Found! - exchange setup");
             // TODO Handle this exception somehow...
             e.printStackTrace();
+        }
+        catch( IOException e) {
+        	//System.exit(1);
+        	//System.out.println("IOException! - exchange setup");
+        	//e.printStackTrace();
+        	//return;
+        	System.out.println("IOException! - exchange setup Server");
+        	System.out.println("closing clients");
+        	try {
+				toPlayerOne.close();
+				toPlayerTwo.close();
+				fromPlayerOne.close();
+				fromPlayerTwo.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        	System.out.println("testing for normies - server ");
+			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost. - server");
+			//System.exit(1);
+			
+        }
+        catch( Exception e) {
+        	System.out.println("Exception! - exchange setup");
+        	e.printStackTrace();
         }
         
     }
@@ -296,9 +337,32 @@ public class ServerGameManager implements Runnable {
                 
                 // Check win conditions.
             }
-            catch (IOException | ClassNotFoundException e) {
-                System.out.println(session + "Error occured during network I/O");
-                return;
+            catch(ClassNotFoundException e) {
+            	System.out.println("Class not Found! - Play game");
+                // TODO Handle this exception somehow...
+                e.printStackTrace();
+            }
+            catch( IOException e) { // things break here DTDICKER BREAKING
+            	System.out.println("IOException! - Play game");
+            	System.out.println("closing clients");
+            	try {
+					toPlayerOne.close();
+					toPlayerTwo.close();
+					fromPlayerOne.close();
+					fromPlayerTwo.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            	
+            	//System.exit(1);
+            	System.out.println("IOException! - Play game");
+            	e.printStackTrace();
+            	return;
+            }
+            catch( Exception e) {
+            	System.out.println("Exception! - Play game");
+            	e.printStackTrace();
             }
         }
     }

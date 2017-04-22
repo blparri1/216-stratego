@@ -11,13 +11,15 @@ public class Player implements Serializable {
     
     private static final long serialVersionUID = 649459794036226272L;
     private String nickname;
-    private PieceColor color;
+    public PieceColor color;
+    public static String nickForEnd;
     
     /**
      * @param nickname the player's nickname
      */
     public void setNickname(String nickname) {
         this.nickname = nickname;
+        this.nickForEnd = nickname;
     }
     
     /**

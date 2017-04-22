@@ -3,6 +3,8 @@ package edu.asu.stratego.gui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -100,8 +102,22 @@ public class BoardScene {
         Game.getBoard().getPiecePane().setAlignment(Pos.CENTER);
         Game.getBoard().getEventPane().setAlignment(Pos.CENTER);
         
+        MenuBar menuBar = new MenuBar();
+        
+        // --- Menu File
+        Menu menuFile = new Menu("File");
+ 
+        // --- Menu Edit
+        Menu menuEdit = new Menu("Edit");
+ 
+        // --- Menu View
+        Menu menuView = new Menu("View");
+ 
+        menuBar.getMenus().addAll(menuFile, menuEdit, menuView);
+        
         
         scene = new Scene(root, SIDE, SIDE);
+        
     }
     
     public static StackPane getRootPane() {
