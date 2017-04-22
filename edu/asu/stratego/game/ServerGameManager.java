@@ -7,6 +7,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import edu.asu.stratego.game.board.ServerBoard;
 
 /**
@@ -178,9 +181,12 @@ public class ServerGameManager implements Runnable {
         }
         catch( IOException e) {
         	//System.exit(1);
-        	System.out.println("IOException! - exchange setup");
-        	e.printStackTrace();
-        	return;
+        	//System.out.println("IOException! - exchange setup");
+        	//e.printStackTrace();
+        	//return;
+        	System.out.println("testing for normies - ");
+			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
+			System.exit(1);
         }
         catch( Exception e) {
         	System.out.println("Exception! - exchange setup");
@@ -328,7 +334,6 @@ public class ServerGameManager implements Runnable {
             	//System.exit(1);
             	System.out.println("IOException! - Play game");
             	e.printStackTrace();
-            	return;
             }
             catch( Exception e) {
             	System.out.println("Exception! - Play game");

@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -83,6 +86,7 @@ public class ClientGameManager implements Runnable {
         }
         catch(InterruptedException e) {
             // TODO Handle this exception somehow...
+        	System.out.println("line 89 client");
             e.printStackTrace();
         }
     }
@@ -165,8 +169,22 @@ public class ClientGameManager implements Runnable {
                     }
                 });
             }
-            catch (InterruptedException | IOException | ClassNotFoundException e) {
+            catch (ClassNotFoundException e) {
+            	System.out.println("line 172 client");
+            	e.printStackTrace();
+            }
+            catch (InterruptedException e) {
+            	e.printStackTrace();
+            	System.out.println("line 176 client");
+            }
+            catch (IOException e) {
+            	System.out.println("line 180 client");
                 // TODO Handle this exception somehow...
+            	e.printStackTrace();
+            }
+            catch (Exception e) {
+            	System.out.println("line 183 client");
+            	e.printStackTrace();
             }
         }
     }
@@ -185,7 +203,11 @@ public class ClientGameManager implements Runnable {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.out.println("testing for normies client line 191");
+			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
+			System.exit(1);
 		} catch (Exception e) {
+			System.out.println("line 195 client");
 			e.printStackTrace();
 		}
 
@@ -248,6 +270,7 @@ public class ClientGameManager implements Runnable {
                 				}
         						catch (Exception e) {
         							// TODO Handle this somehow...
+        							System.out.println("line 257 client");
         							e.printStackTrace();
         						}
                 			});
@@ -285,6 +308,7 @@ public class ClientGameManager implements Runnable {
             			}
 						catch (Exception e) {
 							// TODO Handle this somehow...
+							System.out.println("line 294 client");
 							e.printStackTrace();
 						}
             		});
@@ -316,6 +340,7 @@ public class ClientGameManager implements Runnable {
             			}
 						catch (Exception e) {
 							// TODO Handle this somehow...
+							System.out.println("line 325 client");
 							e.printStackTrace();
 						}
             		});
@@ -391,16 +416,19 @@ public class ClientGameManager implements Runnable {
                 Game.setStatus((GameStatus) fromServer.readObject());
             }
             catch (ClassNotFoundException e) {
-            	System.out.println("Class not found Exception - play game");
+            	System.out.println("Class not found Exception - play game - client");
     			e.printStackTrace();
     		} catch (IOException e) {
     			System.out.println("IO Exception - play game");
-    			e.printStackTrace();
+    			//e.printStackTrace();
+    			System.out.println("testing for normies client");
+    			//JOptionPane.showMessageDialog(new JFrame(), "The connection was lost.");
+    			//System.exit(1);
     		} catch (InterruptedException e) {
-    			System.out.println("Interrupted Exception - play game");
+    			System.out.println("Interrupted Exception - play game client");
     			e.printStackTrace();
     		} catch (Exception e) {
-    			System.out.println("Exception - play game");
+    			System.out.println("Exception - play game client");
     			e.printStackTrace();
     		}
         }
