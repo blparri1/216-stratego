@@ -189,6 +189,8 @@ public class ServerGameManager implements Runnable {
         	try {
 				toPlayerOne.close();
 				toPlayerTwo.close();
+				fromPlayerOne.close();
+				fromPlayerTwo.close();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -346,6 +348,8 @@ public class ServerGameManager implements Runnable {
             	try {
 					toPlayerOne.close();
 					toPlayerTwo.close();
+					fromPlayerOne.close();
+					fromPlayerTwo.close();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
