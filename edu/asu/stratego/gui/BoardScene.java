@@ -11,25 +11,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import java.net.HttpURLConnection;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Optional;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import edu.asu.stratego.game.Game;
 import edu.asu.stratego.gui.board.BoardTurnIndicator;
@@ -175,8 +163,7 @@ public class BoardScene {
 					"\nRanks of Stratego Pieces: \nF. Flag \nB. Bomb \nS. Spy \n2. Scout \n3. Miner \n4. Sergeants \n5. Lieutenents \n6. Captain \n7. Major \n8. Colonel \n9. General \n10. Marshal "; 
 				
 
-
-				Label label = new Label("The Rules of The Game:");
+				Label label = new Label("The Rules of Stratego:");
 
 				TextArea textArea = new TextArea(rules);
 				textArea.setEditable(false);
