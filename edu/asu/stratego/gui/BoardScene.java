@@ -160,8 +160,7 @@ public class BoardScene {
 					"\nRanks of Stratego Pieces: \nF. Flag \nB. Bomb \nS. Spy \n2. Scout \n3. Miner \n4. Sergeants \n5. Lieutenents \n6. Captain \n7. Major \n8. Colonel \n9. General \n10. Marshal "; 
 				
 
-
-				Label label = new Label("The Rules of The Game:");
+				Label label = new Label("The Rules of Stratego:");
 
 				TextArea textArea = new TextArea(rules);
 				textArea.setEditable(false);
