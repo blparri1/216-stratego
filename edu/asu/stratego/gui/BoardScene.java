@@ -1,19 +1,28 @@
 package edu.asu.stratego.gui;
 
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import edu.asu.stratego.game.Game;
 import edu.asu.stratego.gui.board.BoardTurnIndicator;
 import edu.asu.stratego.gui.board.setup.SetupPanel;
 import edu.asu.stratego.media.ImageConstants;
-import edu.asu.stratego.media.PlaySound;
+
+
 
 /**
  * Wrapper class for a JavaFX scene. Contains a scene UI and its associated 
@@ -26,6 +35,7 @@ public class BoardScene {
     
     private static StackPane root       = new StackPane();
     private static GridPane  setupPanel = new GridPane();
+    
     
     Scene scene;
     
@@ -88,6 +98,7 @@ public class BoardScene {
         setupPanel = SetupPanel.getSetupPanel();
         StackPane.setMargin(setupPanel, new Insets(UNIT, 0, 0, 0));
         StackPane.setAlignment(setupPanel, Pos.TOP_CENTER);
+             
         
         // Create the border.
         ImageView border = new ImageView(ImageConstants.BORDER);
@@ -102,21 +113,87 @@ public class BoardScene {
         Game.getBoard().getPiecePane().setAlignment(Pos.CENTER);
         Game.getBoard().getEventPane().setAlignment(Pos.CENTER);
         
+               
+        scene = new Scene(root, SIDE, SIDE); 
+        
+       
+        ////////////////////////////////////////////////////////
+
         MenuBar menuBar = new MenuBar();
         
         // --- Menu File
-        Menu menuFile = new Menu("File");
- 
-        // --- Menu Edit
-        Menu menuEdit = new Menu("Edit");
- 
-        // --- Menu View
-        Menu menuView = new Menu("View");
- 
-        menuBar.getMenus().addAll(menuFile, menuEdit, menuView);
+        Menu menuFile = new Menu("Menu");
+        // --- Menu Items
+        MenuItem help = new MenuItem("Help");
+        MenuItem exit = new MenuItem("Quit Game");
+
         
         
-        scene = new Scene(root, SIDE, SIDE);
+        // Action that quits game 
+        exit.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                System.exit(0);
+            }
+        });
+        
+        //Opens the help page
+        help.setOnAction(new EventHandler<ActionEvent>() {
+        	public void handle(ActionEvent t) {
+        		Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Help");
+				alert.setHeaderText("Click on 'Show Details' to read the rules of the game");
+
+				String rules ="Stratego is a game in which you need to capture the flag of your opponent while"+
+					" defending your own flag. To capture the flag you use your army of 40 pieces. Pieces have a rank"+
+					" and represent individual officers and soldiers in an army. In addition to those ranked pieces you "+
+					"can use bombs to protect your flag.Pieces move 1 square per turn, horizontally or vertically. Only the scout"+
+					"can move over multiple empty squares per turn. Pieces cannot jump over another piece."+
+					"If a piece is moved onto a square occupied by an opposing piece, their identities are revealed. The weaker piece "+
+					"is removed from the board, and the stronger piece is moved into the place formerly occupied by the weaker" +""
+					+ "piece. If the engaging pieces are of equal rank, they are both removed. Pieces may not move onto a square already "+
+					"occupied by another piece without attacking. Exception to the rule of the higher rank winning is the spy. When the spy"+
+					"attacks the marshal, the spy defeats the higher ranked marshal. However, when the marshal attacks the spy, the spy loses. Bombs lose when they are defused by a miner."+
+					"The bombs and the flag cannot be moved. A bomb defeats every piece that tries to attack it, except the miner. The flag loses from every"+
+					" other piece. When you capture the flag of your opponent you win the game.The Stratego board consists of 10 x 10 squares. Within the board "+
+					"there are two obstacles of 2 x 2 squares each. Pieces are not allowed to move there.\n" +
+					
+					"\nRanks of Stratego Pieces: \nF. Flag \nB. Bomb \nS. Spy \n2. Scout \n3. Miner \n4. Sergeants \n5. Lieutenents \n6. Captain \n7. Major \n8. Colonel \n9. General \n10. Marshal "; 
+				
+
+				Label label = new Label("The Rules of Stratego:");
+
+				TextArea textArea = new TextArea(rules);
+				textArea.setEditable(false);
+				textArea.setWrapText(true);
+
+				textArea.setMaxWidth(Double.MAX_VALUE);
+				textArea.setMaxHeight(Double.MAX_VALUE);
+				GridPane.setVgrow(textArea, Priority.ALWAYS);
+				GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+				GridPane expContent = new GridPane();
+				expContent.setMaxWidth(Double.MAX_VALUE);
+				expContent.add(label, 0, 0);
+				expContent.add(textArea, 0, 1);
+
+				// Set expandable Exception into the dialog pane.
+				alert.getDialogPane().setExpandableContent(expContent);
+				 
+				 
+				 
+				alert.showAndWait();	 
+        	}
+        });
+
+        menuFile.getItems().addAll(help, exit);
+        menuBar.getMenus().addAll(menuFile);
+        menuBar.prefWidthProperty().bind(border.fitWidthProperty());
+               
+        root.getChildren().add(menuBar);
+        StackPane.setAlignment(menuBar, Pos.TOP_CENTER);
+        
+        ////////////////////////////////////////////////////////  
+
         
     }
     

@@ -199,7 +199,7 @@ public class ServerGameManager implements Runnable {
 				//e1.printStackTrace();
 			}
         	System.out.println("testing for normies - server ");
-			JOptionPane.showMessageDialog(new JFrame(), "The connection was lost. - server");
+			//JOptionPane.showMessageDialog(new JFrame(), "The connection was lost. - server");
 			//System.exit(1);
 			
         }
